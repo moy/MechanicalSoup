@@ -129,4 +129,4 @@ See also
 Status
 ------
 
-[![Coverage Status](https://coveralls.io/repos/github/hickford/MechanicalSoup/badge.svg?branch=master)](https://coveralls.io/github/hickford/MechanicalSoup?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/hickford/MechanicalSoup/badge.svg?branch=master)](https://coveralls.io/github/hickford/MechanicalSoup?branch=master) [![Build Status](https://travis-ci.org/hickford/MechanicalSoup.svg?branch=master)](https://travis-ci.org/moy/MechanicalSoup)
