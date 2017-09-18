@@ -12,7 +12,6 @@ python:
 install:
   - pip install pytest pytest-cov
   - pip install coveralls
-  - python setup.py install
   - pip install flake8 requests_mock
 script:
   - |
@@ -20,6 +19,6 @@ script:
     then
         flake8 $(git ls-files mechanicalsoup/'*.py') example.py
     fi
-  - py.test --cov coveralls --cov-report term-missing
+  - py.test tests
 after_success:
   - coveralls

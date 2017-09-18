@@ -1,3 +1,10 @@
+import sys
+import os
+import inspect
+TEST_DIR = os.path.dirname(inspect.getfile(inspect.currentframe()))
+PROJ_DIR = os.path.dirname(TEST_DIR)
+sys.path.insert(0, PROJ_DIR)
+
 import mechanicalsoup
 import requests_mock
 try:
