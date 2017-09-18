@@ -10,6 +10,8 @@ python:
   - pypy
   - pypy3
 install:
+  - pip install pytest pytest-cov
+  - pip install coveralls
   - python setup.py install
   - pip install flake8 requests_mock
 script:
@@ -19,3 +21,5 @@ script:
         flake8 $(git ls-files mechanicalsoup/'*.py') example.py
     fi
   - py.test
+after_success:
+  - coveralls
