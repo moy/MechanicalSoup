@@ -20,6 +20,6 @@ script:
     then
         flake8 $(git ls-files mechanicalsoup/'*.py') example.py
     fi
-  - py.test
+  - py.test --cov coveralls --cov-report term-missing
 after_success:
   - coveralls
