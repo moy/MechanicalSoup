@@ -125,3 +125,8 @@ See also
 * [RoboBrowser](https://github.com/jmcarp/robobrowser): a similar library, also based on Requests and BeautifulSoup.
 * [Hacker News post](https://news.ycombinator.com/item?id=8012103)
 * [Reddit discussion](http://www.reddit.com/r/programming/comments/2aa13s/mechanicalsoup_a_python_library_for_automating/)
+
+Status
+------
+
+[![Coverage Status](https://coveralls.io/repos/github/hickford/MechanicalSoup/badge.svg?branch=master)](https://coveralls.io/github/hickford/MechanicalSoup?branch=master)
