@@ -1,3 +1,4 @@
+import os
 import tempfile
 import setpath  # noqa:F401, must come before 'import mechanicalsoup'
 import mechanicalsoup
@@ -414,6 +415,75 @@ def test_link_arg_regex(httpbin):
     browser.open_fake_page('<a href="/get">Link</a>', httpbin.url)
     browser.follow_link(url_regex='.*')
     assert browser.get_url() == httpbin + '/get'
+
+
+def file_get_contents(filename):
+    with open(filename, "rb") as f:
+        return f.read()
+
+
+def test_download_link(httpbin):
+    """Test downloading the contents of a link to file."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open(httpbin.url)
+    tmpdir = tempfile.mkdtemp()
+    tmpfile = tmpdir + '/nosuchfile.png'
+    current_url = browser.get_url()
+    current_page = browser.get_current_page()
+    response = browser.download_link(tmpfile, link='image/png')
+
+    # Check that the browser state has not changed
+    assert browser.get_url() == current_url
+    assert browser.get_current_page() == current_page
+
+    # Check that the file was downloaded
+    assert os.path.isfile(tmpfile)
+    assert file_get_contents(tmpfile) == response.content
+    # Check that we actually downloaded a PNG file
+    assert response.content[:4] == b'\x89PNG'
+
+
+def test_download_link_to_existing_file(httpbin):
+    """Test downloading the contents of a link to an existing file."""
+    browser = mechanicalsoup.StatefulBrowser()
+    browser.open(httpbin.url)
+    tmpdir = tempfile.mkdtemp()
+    tmpfile = tmpdir + '/existing.png'
+    with open(tmpfile, "w") as f:
+        f.write("initial content")
+    current_url = browser.get_url()
+    current_page = browser.get_current_page()
+    response = browser.download_link(tmpfile, link='image/png')
+
+    # Check that the browser state has not changed
+    assert browser.get_url() == current_url
+    assert browser.get_current_page() == current_page
+
+    # Check that the file was downloaded
+    assert os.path.isfile(tmpfile)
+    assert file_get_contents(tmpfile) == response.content
+    # Check that we actually downloaded a PNG file
+    assert response.content[:4] == b'\x89PNG'
+
+
+def test_download_link_404(httpbin):
+    """Test downloading the contents of a broken link."""
+    browser = mechanicalsoup.StatefulBrowser(raise_on_404=True)
+    browser.open_fake_page('<a href="/no-such-page-404">Link</a>',
+                           url=httpbin.url)
+    tmpdir = tempfile.mkdtemp()
+    tmpfile = tmpdir + '/nosuchfile.txt'
+    current_url = browser.get_url()
+    current_page = browser.get_current_page()
+    with pytest.raises(mechanicalsoup.LinkNotFoundError):
+        browser.download_link(tmpfile, link_text='Link')
+
+    # Check that the browser state has not changed
+    assert browser.get_url() == current_url
+    assert browser.get_current_page() == current_page
+
+    # Check that the file was not downloaded
+    assert not os.path.exists(tmpfile)
 
 
 if __name__ == '__main__':
